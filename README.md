@@ -28,6 +28,20 @@
 
 ## Setup
 
+### Option A — Automatic (Recommended)
+Double-click **`install.bat`** — it will:
+1. Check your Python version
+2. Ask if you have an NVIDIA GPU and install the correct PyTorch build
+3. Install all remaining dependencies
+4. Create `config.json` from the template
+5. Create required folders
+
+Then place your model in `assets/models/` and double-click **`run.bat`** to start.
+
+---
+
+### Option B — Manual
+
 ### 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
