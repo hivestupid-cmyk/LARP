@@ -1,0 +1,56 @@
+# ── Python cache ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# ── Runtime logs & debug output ───────────────────────────────────────────────
+bot.log
+*.log
+logs/
+debug_capture.png
+debug_ocr/
+
+# ── Config (contains Discord tokens & webhook URLs — DO NOT COMMIT) ────────────
+config.json
+
+# ── AI Models (large binary files — distribute separately) ────────────────────
+assets/models/
+*.pt
+*.onnx
+*.engine
+*.trt
+yolo*.pt
+
+# ── Training / dataset artifacts ──────────────────────────────────────────────
+datasets/
+runs/
+dataset_preview_gallery/
+
+# ── Reconnect history ─────────────────────────────────────────────────────────
+logs/reconnect_history.csv
+
+# ── Windows artifacts ─────────────────────────────────────────────────────────
+*.lnk
+Thumbs.db
+desktop.ini
+
+# ── Dev scratch files ─────────────────────────────────────────────────────────
+scratch_fix.py
+test_*.py
+test_capture.py
+test_mouse.py
+_audit.py
+*.tmp
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env
+
+# ── IDE / Editor ──────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
