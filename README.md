@@ -8,6 +8,21 @@
 
 ---
 
+## Table of Contents
+- [Features](#features)
+- [Requirements](#requirements)
+- [Setup](#setup)
+- [Hotkeys (Default)](#hotkeys-default)
+- [Project Structure](#project-structure)
+- [Strategy & Recommended Build](#strategy--recommended-build)
+- [Troubleshooting](#troubleshooting)
+- [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
+- [Bug Reporting & Contact](#bug-reporting--contact)
+- [Discord Setup (Optional)](#discord-setup-optional)
+- [Notes](#notes)
+
+---
+
 ## Features
 
 - **AI Combat Engine** — Real-time YOLO detection with Kalman-filter aim assist and dynamic lead prediction
@@ -23,7 +38,7 @@
 
 - **OS:** Windows 10/11
 - **Python:** 3.10+
-- **GPU:** NVIDIA GPU strongly recommended (for real-time YOLO inference)
+- **GPU:** NVIDIA GPU strongly recommended (**Minimum 4GB VRAM** required for smooth real-time YOLO inference)
 - **Roblox:** Must be running before the bot starts
 
 ---
@@ -96,140 +111,57 @@ Hotkeys are configurable in `config.json` under `"bot"`.
 
 ---
 
-## Recommended Build (AOTR)
+## Strategy & Recommended Build
 
-> **This section is a recommendation, not a requirement.** The bot can run on any build,
-> but the configurations below are optimized to get the best possible performance and efficiency
-> from the automation. Deviating significantly from the recommended perks may noticeably reduce results.
+For optimal bot performance, we highly recommend following our specific build guide (including family, perks, stats, and modifiers). 
 
----
-
-### Family
-
-The following families are recommended for their passive stat bonuses and extra perk slots, which synergize well with the Thunder Spear build this bot is designed around.
+👉 **[Read the Recommended Build Guide (STRATEGY.md)](STRATEGY.md)**
 
 ---
 
-#### Helos — Mythical
-The strongest dedicated ODM family in the game. Cannot become a Titan Shifter, but in return offers an exceptional all-round stat boost for ODM combat.
+## Troubleshooting
 
-| Stat | Bonus |
-|---|---|
-| CRIT Chance / Damage | +20% |
-| ODM / TS Damage | +30% |
-| ODM / TS Control / Gas / Range / Speed | +15% |
-| Blade Durability / Conservation Chance | +15% / +7.5% |
-| Cooldown Reduction | +10% |
-| Boost Dash | +1 |
-| Extra Perk Slots | +1 Offense, +1 Support |
+### 1. PyTorch / CUDA Version Mismatch
+If the bot crashes on startup or runs extremely slowly on an NVIDIA GPU, your PyTorch version likely doesn't match your CUDA drivers.
+- **Fix:** Uninstall the current PyTorch (`pip uninstall torch torchvision`) and reinstall the correct version using the command from the [official PyTorch website](https://pytorch.org/get-started/locally/). Ensure you select the CUDA version that matches your system. Alternatively, run `install.bat` again and select `Y` for the GPU installation.
 
----
+### 2. Bot Doesn't Click / Move
+- Ensure Roblox is the active window.
+- Make sure you are running the bot as Administrator if required by your system.
+- Check the `config.json` to ensure your `screen.width` and `screen.height` match your actual display resolution.
 
-#### Shiki — Secret Mythical
-The rarest family in the game, unlocked by collecting 64 Achievements (Apex achievement). Offers the highest raw damage bonus and the most Boost Dashes.
-
-| Stat | Bonus |
-|---|---|
-| CRIT Chance / Damage | +15% |
-| Damage | +20% |
-| Damage in Raids | +20% |
-| ODM Control / Gas / Range | +10% |
-| Luck Boost | +7.5% |
-| Boost Dash | +2 |
-| Extra Perk Slots | +1 Core |
+### 3. "Model not found" Error
+- Make sure you have placed your trained `.pt` model inside the `assets/models/` folder. The bot will not run without it.
 
 ---
 
-#### Ackerman — Legendary
-A more accessible choice compared to Mythical families. Cannot become a Titan Shifter. Offers solid all-round bonuses with an extra Offensive Perk Slot and a Double Jump, which helps with positioning during combat.
+## Frequently Asked Questions (FAQ)
 
-| Stat | Bonus |
-|---|---|
-| Damage | +20% |
-| Damage in Raids | +20% |
-| Critical Chance / Damage | +15% |
-| ODM Control / Gas / Range | +10% |
-| Boost Dash | +1 |
-| Jump | +1 (Double Jump) |
-| Extra Perk Slots | +1 Offense |
+**Q: Why is the bot shooting at trees/buildings instead of Titans?**
+> **A:** The AI model relies on visual patterns. If the in-game lighting is unusual or your graphics settings are too low/high, it might get confused. Ensure you are playing in standard weather (avoid heavy fog if possible) and try adjusting the `confidence` threshold in the Settings GUI. If the issue persists, the YOLO model might need retraining on a more diverse dataset.
 
----
+**Q: The bot feels very slow and my FPS drops significantly.**
+> **A:** The bot runs a heavy AI model in real-time. Make sure your PC meets the **Minimum 4GB VRAM** requirement. You can also lower the `target_fps` in the Settings GUI to reduce the scanning frequency and free up CPU/GPU resources for the game.
 
-### Perks
+**Q: I get a CUDA error when starting the bot!**
+> **A:** This usually happens when your installed PyTorch version doesn't match your NVIDIA drivers. Please see Issue #1 in the **Troubleshooting** section above.
 
-#### Required Perks
-These three perks are considered **essential**. Removing any of them will result in a noticeable drop in bot performance.
+**Q: The bot says it's running, but my character isn't moving or attacking.**
+> **A:** Simulated inputs require the Roblox window to be actively focused. If you click on another monitor or open another app, the bot's keystrokes won't register in the game. Make sure Roblox is the active window. Also, try running the bot as Administrator.
 
-| Perk | Effect |
-|---|---|
-| **Everlasting Flame** | Increases Thunder Spear blast radius and ignites titans hit by the explosion |
-| **Maximum Firepower** | Increases ammo capacity to 4 spears, boosts spear projectile speed by 40%, and raises all stats by 7.5% |
-| **Explosive Fortune** | Adds 10% conservation chance and a 5% chance to gain +1 spear on titan kill |
-
-#### Optional Perks
-These perks provide meaningful bonuses and are recommended if available.
-
-| Perk | Effect |
-|---|---|
-| **Kengo** | +40% Thunder Spear damage, +10% conservation chance, and allows spears to hit two titan body parts simultaneously |
-| **Immortal** | Survivability perk — useful for maintaining uptime during extended sessions |
+**Q: Can I run this bot on Mac or Linux?**
+> **A:** No. The bot relies on Windows-specific libraries (like `ctypes` for `win32gui`) to interact with the game window and simulate mouse/keyboard inputs. It is strictly designed for **Windows 10/11**.
 
 ---
 
-### Stats Priority
+## Bug Reporting & Contact
 
-Maximize the following stats in this order for best results:
+If you encounter a bug that isn't covered in the Troubleshooting or FAQ sections, please report it!
 
-1. **Conservation Chance** — directly increases spear sustainability
-2. **Thunder Spear Damage** — higher burst damage means faster titan kills
-3. **Critical Chance** — amplifies overall damage output
-4. **Blast Radius** — increases AOE effectiveness per spear hit
+1. **GitHub Issues:** Open an issue on this repository. Please include your OS, GPU model, and a screenshot of the terminal error.
+2. **Discord:** You can reach out directly to the developer on Discord: **`sgod666`**.
 
----
-
-### Skills and Talents
-
-#### Recommended Skill Loadout
-
-| Slot | Skill | Notes |
-|---|---|---|
-| 1 | **Grasp Blast** | Detonate a thunder spear when grabbed |
-| 2 | **Combustive Counter** | Grasp Blast but instant kill a titan |
-| 3 | **Acoustic Shells** | Aggro all titans within 750m range |
-| 4-5 | *(free choice)* | Any preferred utility skill |
-
-#### Recommended Talent
-
-| Talent | Reason |
-|---|---|
-| **Survivalist** | Grants "Grab Escaping" skills +20% conservation chance — directly boosts spear uptime, which the bot depends on heavily |
-
----
-
-### Objective
-
-The bot currently **only supports the Guard objective**. Other objectives are not yet implemented.
-
----
-
-### Recommended Modifiers
-
-Stacking the modifiers below maximizes Gold and EXP bonus multipliers per run:
-
-| Modifier | Type |
-|---|---|
-| No Skills | Difficulty |
-| No Talents | Difficulty |
-| Nightmare | Difficulty |
-| Oddball | Difficulty |
-| Injury Prone | Difficulty |
-| Chronic Injuries | Difficulty |
-| Fog | Difficulty |
-| Glass Cannon | Difficulty |
-| Time Trial | Difficulty |
-
-> These modifiers increase reward multipliers without fundamentally changing the combat flow
-> that the bot is designed around, making them safe to stack for farming efficiency.
+*Note: Please check the FAQ and Troubleshooting sections first before sending a message!*
 
 ---
 
@@ -277,6 +209,14 @@ L.A.R.Pv1/
 - `config.json` is excluded from git (contains your private tokens). Use `config.example.json` as the template.
 - AI model files (`*.pt`) are excluded from git due to their size. Distribute separately.
 - The bot sets its working directory to the project root on startup — it can be run from any location.
+
+---
+
+## Disclaimer
+
+> ⚠️ **USE AT YOUR OWN RISK.**
+> 
+> Although this bot does not inject code into the game client (it operates entirely via screen capture and simulated inputs), using any form of automated macro or auto-grinding bot may still violate Roblox's or the specific game's Terms of Service. The developers of L.A.R.P assume **zero responsibility** if your account gets restricted, banned, or penalized. Please use this tool responsibly.
 
 ---
 
