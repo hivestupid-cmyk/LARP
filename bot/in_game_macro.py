@@ -219,10 +219,16 @@ class InGameMacro:
         # Use config key, fallback to empty string (no crash if path doesn't exist on other PCs)
         from bot.config import config
         macro_path = config.get("bot", "macro_file", "")
+        
+        # Phase 2708: Auto-Fallback to custom_macro.json if not set in GUI
+        if not macro_path and os.path.exists("custom_macro.json"):
+            logger.info("[Macro] 'macro_file' config is empty, but 'custom_macro.json' found! Auto-loading it.")
+            macro_path = "custom_macro.json"
+
         if macro_path:
             self._load_macro(macro_path)
         else:
-            logger.info("[Macro] No macro_file configured. Will run Dynamic Combat only.")
+            logger.info("[Macro] No static macro loaded. Booting directly to Dynamic Combat Engine.")
 
     def set_screen_res(self, w: int, h: int) -> None:
         """Updates internal resolution for delta calculations (V8.9)."""

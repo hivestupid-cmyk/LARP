@@ -10,7 +10,7 @@ bot.log
 logs/
 debug_capture.png
 debug_ocr/
-
+UPDATE_GITHUB.md
 # ── Config (contains Discord tokens & webhook URLs — DO NOT COMMIT) ────────────
 config.json
 

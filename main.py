@@ -176,6 +176,12 @@ def main() -> None:
             
         logger.info("Initializing Bot components (Settings confirmed)...")
         
+        # Phase 2709: Automated AI Model Downloader
+        import bot.download_model
+        if not bot.download_model.ensure_model_exists():
+            logger.critical("Failed to download AI Model! The bot cannot start.")
+            return
+        
         # Initialize components
         overlay = OverlayWindow()
         # Always show overlay window — show_overlay only gates boxes/labels inside paintEvent.

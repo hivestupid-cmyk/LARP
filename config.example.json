@@ -10,9 +10,9 @@
         "auto_attack": true,
         "ts_dist_threshold": 100,
         "bot_speed": 1.4,
-        "show_overlay": false,
+        "show_overlay": true,
         "eyes_only": false,
-        "model_path": "assets/models",
+        "model_path": "assets/models/train_20260405_0650/best.pt",
         "macro_file": "",
         "target_fps_annie_mark": 40
     },
@@ -59,146 +59,47 @@
         "models_dir": "assets/models"
     },
     "coordinates": {
-        "slot_a": [
-            635,
-            682
-        ],
-        "slot_b": [
-            956,
-            682
-        ],
-        "slot_c": [
-            1273,
-            682
-        ],
-        "select_char_play": [
-            949,
-            604
-        ],
-        "lobby_button_ui": [
-            786,
-            532
-        ],
-        "main_menu_play": [
-            1652,
-            887
-        ],
-        "main_menu_lobby": [
-            780,
-            525
-        ],
-        "main_menu_mission": [
-            231,
-            893
-        ],
-        "retry_game": [
-            1144,
-            825
-        ],
-        "results_lobby": [
-            960,
-            825
-        ],
-        "map_giant_forest": [
-            1306,
-            806
-        ],
-        "objective_button": [
-            793,
-            844
-        ],
-        "objective_guard": [
-            795,
-            548
-        ],
-        "objective_back": [
-            790,
-            841
-        ],
-        "modifier_back": [
-            951,
-            827
-        ],
-        "modifier_no_perks": [
-            640,
-            503
-        ],
-        "modifier_no_skills": [
-            637,
-            575
-        ],
-        "modifier_no_talents": [
-            639,
-            650
-        ],
-        "modifier_nightmare": [
-            637,
-            721
-        ],
-        "modifier_oddball": [
-            638,
-            794
-        ],
-        "modifier_injury_prone": [
-            640,
-            503
-        ],
-        "modifier_chronic_injuries": [
-            637,
-            575
-        ],
-        "modifier_fog": [
-            639,
-            650
-        ],
-        "modifier_glass_cannon": [
-            637,
-            721
-        ],
-        "modifier_time_trial": [
-            638,
-            794
-        ],
-        "modifier_boring": [
-            0,
-            0
-        ],
-        "modifier_simple": [
-            0,
-            0
-        ],
-        "modifiers_button": [
-            958,
-            843
-        ],
-        "difficulty_next": [
-            1071,
-            459
-        ],
-        "start_create": [
-            964,
-            843
-        ],
-        "start_game": [
-            1136,
-            842
-        ],
-        "leave_button": [
-            960,
-            585
-        ],
-        "cutscene_skip": [
-            1796,
-            993
-        ]
+        "slot_a": [635, 682],
+        "slot_b": [956, 682],
+        "slot_c": [1273, 682],
+        "select_char_play": [949, 604],
+        "lobby_button_ui": [786, 532],
+        "main_menu_play": [1652, 887],
+        "main_menu_lobby": [780, 525],
+        "main_menu_mission": [231, 893],
+        "retry_game": [1144, 825],
+        "results_lobby": [960, 825],
+        "map_giant_forest": [1306, 806],
+        "objective_button": [793, 844],
+        "objective_guard": [795, 548],
+        "objective_back": [790, 841],
+        "modifier_back": [951, 827],
+        "modifier_no_perks": [640, 503],
+        "modifier_no_skills": [637, 575],
+        "modifier_no_talents": [639, 650],
+        "modifier_nightmare": [637, 721],
+        "modifier_oddball": [638, 794],
+        "modifier_injury_prone": [640, 503],
+        "modifier_chronic_injuries": [637, 575],
+        "modifier_fog": [639, 650],
+        "modifier_glass_cannon": [637, 721],
+        "modifier_time_trial": [638, 794],
+        "modifier_boring": [0, 0],
+        "modifier_simple": [0, 0],
+        "modifiers_button": [958, 843],
+        "difficulty_next": [1071, 459],
+        "start_create": [964, 843],
+        "start_game": [1136, 842],
+        "leave_button": [960, 585],
+        "cutscene_skip": [1796, 993]
     },
     "discord_bot": {
         "token": "YOUR_DISCORD_BOT_TOKEN_HERE",
-        "admin_user_id": "YOUR_DISCORD_USER_ID",
-        "enabled": true,
+        "admin_user_id": "YOUR_ADMIN_ID_HERE",
+        "enabled": false,
         "command_prefix": "!",
-        "webhook_url": "https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN",
-        "reward_webhook_url": "https://discord.com/api/webhooks/YOUR_REWARD_WEBHOOK_ID/YOUR_REWARD_WEBHOOK_TOKEN",
+        "webhook_url": "YOUR_WEBHOOK_URL_HERE",
+        "reward_webhook_url": "YOUR_REWARD_WEBHOOK_URL_HERE",
         "webhook_msg_ids": {
             "system_log": "",
             "state": "",
@@ -215,15 +116,15 @@
         "enable_auto_focus": true
     },
     "aim_assist": {
-        "show_fov_circle": false,
-        "show_ipm_line": false,
-        "fov_radius": 600,
-        "p_gain": 2.0,
-        "max_delta": 100,
-        "max_detection_speed_px_s": 1000,
-        "measurement_var": 1.0,
-        "kalman_enabled": false,
-        "dampening_enabled": false,
+        "show_fov_circle": true,
+        "show_ipm_line": true,
+        "fov_radius": 150,
+        "p_gain": 0.4,
+        "max_delta": 15,
+        "max_detection_speed_px_s": 2500,
+        "measurement_var": 20.0,
+        "kalman_enabled": true,
+        "dampening_enabled": true,
         "dead_reckoning_enabled": true,
         "lead_prediction_enabled": true,
         "global_offset_x": 0,
@@ -231,25 +132,25 @@
     },
     "combat_engine": {
         "use_hybrid_ipm": false,
-        "use_assault_click": true,
-        "assault_key_click_delay": 0.06,
-        "assault_duration": 1.3,
-        "cooldown_duration": 0.3,
-        "annie_mark_y_offset": 0,
-        "startup_delay": 0.2,
-        "approach_qe_hold_bonus": 0.0,
-        "aim_memory_duration": 10.0,
+        "use_assault_click": false,
+        "assault_key_click_delay": 0.1,
+        "assault_duration": 1.5,
+        "cooldown_duration": 1.0,
+        "annie_mark_y_offset": 150,
+        "startup_delay": 2.0,
+        "approach_qe_hold_bonus": 1.0,
+        "aim_memory_duration": 4.0,
         "safe_aim_activation_time": 2.5,
-        "static_macro_max_duration": 0.0,
+        "static_macro_max_duration": 7.0,
         "ipm_k": 120.0,
         "ipm_c": 0.2,
         "ipm_clamp_min": 0.3,
         "ipm_clamp_max": 2.0,
         "ipm_turn_factor": 0.0005,
-        "enable_lag_compensation": false,
+        "enable_lag_compensation": true,
         "lag_comp_max_mult": 1.3,
-        "base_click_duration_ms": 60,
-        "assault_duration_first": 0.8
+        "base_click_duration_ms": 70,
+        "assault_duration_first": 1.0
     },
     "reward_regions": {
         "enabled": true,
@@ -259,12 +160,7 @@
         "sanity_max_value": 9999999,
         "templates_dir": "bot/templates",
         "template_match_threshold": 0.72,
-        "reward_box": [
-            598,
-            598,
-            720,
-            93
-        ],
+        "reward_box": [598, 598, 720, 93],
         "exp": null,
         "gold": null,
         "exp_bp": null,

@@ -1,5 +1,6 @@
-# L.A.R.P — AOTR Bot v1
+# 🤖 L.A.R.P — AOTR Bot v1
 
+![L.A.R.P UI Preview](assets/previews/ui_preview_main.png)
 
 **L.A.R.P** (Logic AI Robotic Program) is an AI-powered bot for **Attack on Titan: Revolution (AOTR)** on Roblox. It uses a real-time YOLO object detection model to automate gameplay — targeting, combat, reconnecting, and more.
 
@@ -151,6 +152,9 @@ If the bot crashes on startup or runs extremely slowly on an NVIDIA GPU, your Py
 
 **Q: Can I run this bot on Mac or Linux?**
 > **A:** No. The bot relies on Windows-specific libraries (like `ctypes` for `win32gui`) to interact with the game window and simulate mouse/keyboard inputs. It is strictly designed for **Windows 10/11**.
+
+**Q: Why is there no .exe version? Can I compile this to a single executable?**
+> **A:** While possible, we do not provide or recommend a compiled `.exe` version. L.A.R.P uses massive AI libraries (like PyTorch and CUDA) that are several gigabytes in size. Compiling everything into a single executable would result in a file size exceeding **3 GB+**, which is far too bloated for a Roblox bot. Running it directly via Python is much more efficient and allows for easier updates.
 
 ---
 

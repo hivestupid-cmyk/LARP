@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QRadioButton, QCheckBox, QPushButton, QButtonGroup,
     QFrame, QScrollArea, QFileDialog, QLineEdit, QTextEdit,
-    QSlider
+    QSlider, QDialog, QSpinBox, QDoubleSpinBox, QFormLayout
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QFileSystemWatcher
 from bot.config import config
@@ -27,112 +27,194 @@ class SettingsWindow(QWidget):
         self.setFixedHeight(600)
         
         self.stop_enhance_signal.connect(self._stop_hotkey_triggered)
+        # Modern Glassmorphism effect
+        self.setWindowOpacity(0.96)
         
-        # Premium Dark Mode Stylesheet (Inspired by Revolution Macro / demo_1.png)
+        # Premium Dark Mode / Gray Stylesheet
         self.setStyleSheet("""
             QWidget {
-                background-color: #212121;
-                color: #E0E0E0;
-                font-family: 'Segoe UI', Roboto, sans-serif;
+                background-color: #1A1A1A;
+                color: #B0B0B0;
+                font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
                 font-size: 13px;
             }
             QTabWidget::pane {
                 border: 1px solid #333333;
-                background-color: #212121;
-                border-radius: 5px;
+                background-color: #202020;
+                border-radius: 6px;
             }
             QTabBar::tab {
-                background: #1C1C1C;
-                color: #8A8A8A;
-                padding: 12px 18px;
+                background: #151515;
+                color: #888888;
+                padding: 10px 15px;
                 font-weight: bold;
-                border: 1px solid #2A2A2A;
+                border: 1px solid #252525;
                 border-bottom: none;
-                border-top-left-radius: 6px;
-                border-top-right-radius: 6px;
-                min-width: 150px;
-                margin-right: 2px;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+                min-width: 110px;
+                margin-right: 4px;
+            }
+            QTabBar::scroller {
+                width: 0px;
             }
             QTabBar::tab:selected {
                 color: #FFFFFF;
-                background: #2B2B2B;
-                border: 1px solid #444444;
-                border-bottom: 2px solid #1E88E5;
+                background: #202020;
+                border: 1px solid #404040;
+                border-bottom: 2px solid #555555;
             }
             QTabBar::tab:hover:!selected {
-                background: #262626;
-                color: #FFFFFF;
+                background: #252525;
+                color: #DDDDDD;
             }
             QFrame#Section {
-                background-color: #2B2B2B;
-                border: 1px solid #3A3A3A;
+                background-color: #252525;
+                border: 1px solid #383838;
                 border-radius: 8px;
-                padding: 10px;
+                padding: 15px;
                 margin: 5px;
             }
             QFrame#SubSection {
-                background-color: #303030;
-                border: 1px solid #404040;
+                background-color: #2A2A2A;
+                border: 1px solid #444444;
                 border-radius: 6px;
-                padding: 8px;
-                margin-top: 5px;
+                padding: 10px;
+                margin-top: 8px;
             }
             QLabel#Title {
-                font-size: 18px;
+                font-size: 20px;
                 font-weight: bold;
-                color: #FFFFFF;
-                padding-left: 5px;
+                color: #E0E0E0;
+                padding-left: 2px;
             }
             QLabel#SubTitle {
-                font-size: 14px;
+                font-size: 15px;
                 font-weight: bold;
-                color: #BDBDBD;
-                margin-top: 2px;
-                margin-bottom: 5px;
-                padding-bottom: 2px;
-                border-bottom: 1px solid #444444;
+                color: #B0B0B0;
+                margin-top: 5px;
+                margin-bottom: 8px;
+                padding-bottom: 4px;
+                border-bottom: 1px solid #555555;
+            }
+            QLabel {
+                background-color: transparent;
+                color: #B0B0B0;
             }
             QRadioButton, QCheckBox {
-                spacing: 8px;
-                padding: 4px;
-                color: #CCCCCC;
+                background-color: transparent;
+                spacing: 10px;
+                padding: 5px;
+                color: #B0B0B0;
+                font-weight: 500;
             }
-            QRadioButton::indicator, QCheckBox::indicator {
-                width: 16px;
-                height: 16px;
-                border-radius: 3px;
-                border: 1px solid #555555;
+            QCheckBox::indicator, QRadioButton::indicator {
+                width: 18px;
+                height: 18px;
+                border-radius: 4px;
+                border: 2px solid #505050;
                 background: #1E1E1E;
             }
-            QCheckBox::indicator:checked {
-                background: #1E88E5;
-                border: 1px solid #1E88E5;
+            QRadioButton::indicator {
+                border-radius: 9px;
+            }
+            QCheckBox::indicator:hover, QRadioButton::indicator:hover {
+                border: 2px solid #777777;
+            }
+            QCheckBox::indicator:checked, QRadioButton::indicator:checked {
+                background: #606060;
+                border: 2px solid #888888;
             }
             QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
-                background-color: #1A1A1A;
-                color: #FFFFFF;
-                border: 1px solid #333333;
-                border-radius: 4px;
-                padding: 4px 8px;
-                selection-background-color: #1E88E5;
+                background-color: #121212;
+                color: #E0E0E0;
+                border: 1px solid #444444;
+                border-radius: 5px;
+                padding: 6px 10px;
+                selection-background-color: #555555;
             }
             QLineEdit:focus, QSpinBox:focus, QComboBox:focus {
-                border: 1px solid #1E88E5;
+                border: 1px solid #777777;
+                background-color: #181818;
+            }
+            QSpinBox::up-button, QSpinBox::down-button, 
+            QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+                width: 0px;
+                height: 0px;
+                border: none;
+                background: transparent;
+            }
+            QComboBox::drop-down {
+                border: none;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #1A1A1A;
+                border: 1px solid #444444;
+                selection-background-color: #333333;
+                color: #B0B0B0;
+            }
+            QPushButton {
+                background-color: #333333;
+                color: #FFFFFF;
+                border: 1px solid #555555;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #444444;
+                border: 1px solid #777777;
+            }
+            QPushButton:pressed {
+                background-color: #222222;
             }
             QPushButton#SaveBtn {
-                background-color: #2E7D32; color: #fff; padding: 10px; font-weight: bold; border-radius: 5px;
+                background-color: #2D4A22; border: 1px solid #3E6B2E;
             }
-            QPushButton#SaveBtn:hover { background-color: #388E3C; }
+            QPushButton#SaveBtn:hover { background-color: #3E6B2E; }
             QPushButton#ReloadBtn {
-                background-color: #F57C00; color: #fff; padding: 10px; font-weight: bold; border-radius: 5px;
+                background-color: #6B4210; border: 1px solid #8C5716;
             }
-            QPushButton#ReloadBtn:hover { background-color: #FB8C00; }
-            QPushButton#StartBtn {
-                background-color: #1976D2; color: #fff; padding: 10px; font-weight: bold; border-radius: 5px;
+            QPushButton#ReloadBtn:hover { background-color: #8C5716; }
+            QPushButton#StartBtn, QPushButton#HotkeyBtn {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2196F3, stop:1 #1565C0);
+                border: 1px solid #0D47A1;
+                color: #FFFFFF;
+                padding: 10px;
+                font-size: 13px;
+                border-radius: 5px;
             }
-            QPushButton#StartBtn:hover { background-color: #1E88E5; }
+            QPushButton#StartBtn:hover, QPushButton#HotkeyBtn:hover { 
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #42A5F5, stop:1 #1976D2);
+                border: 1px solid #0D47A1;
+            }
+            QPushButton#StartBtn:pressed, QPushButton#HotkeyBtn:pressed { 
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #0D47A1, stop:1 #0B3B70);
+            }
             QScrollArea { border: none; background: transparent; }
             QScrollArea > QWidget > QWidget { background: transparent; }
+            
+            /* Custom Dark Scrollbar */
+            QScrollBar:vertical {
+                border: none;
+                background: #1A1A1A;
+                width: 8px;
+                margin: 0px;
+            }
+            QScrollBar::handle:vertical {
+                background: #444444;
+                min-height: 30px;
+                border-radius: 4px;
+            }
+            QScrollBar::handle:vertical:hover {
+                background: #666666;
+            }
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+                height: 0px;
+            }
+            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+                background: none;
+            }
         """)
 
         self.layout = QVBoxLayout()
@@ -141,13 +223,32 @@ class SettingsWindow(QWidget):
         # --- Top Header Bar ---
         header_layout = QHBoxLayout()
         header_layout.setContentsMargins(10, 5, 10, 5)
-        title_label = QLabel("L.A.R.P", objectName="Title")
-        header_layout.addWidget(title_label)
-        header_layout.addStretch()
         
-        kill_btn = QPushButton("EXIT")
+        header_layout.addStretch() # Left stretch
+        title_label = QLabel("L.A.R.P", objectName="Title")
+        # Modernized title style: light gray, centered feel
+        title_label.setStyleSheet("color: #B0B0B0; font-size: 18px; font-weight: bold; letter-spacing: 2px;")
+        header_layout.addWidget(title_label)
+        header_layout.addStretch() # Right stretch
+        
+        kill_btn = QPushButton("✕")
         kill_btn.setToolTip("Force Quit App")
-        kill_btn.setStyleSheet("background-color: #b71c1c; color: #fff; padding: 5px 12px; font-weight: bold; border-radius: 4px; font-size: 14px;")
+        kill_btn.setFixedSize(30, 30)
+        kill_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #252525; 
+                color: #CCCCCC; 
+                font-weight: bold; 
+                border-radius: 15px; 
+                font-size: 14px;
+                border: 1px solid #444444;
+            }
+            QPushButton:hover {
+                background-color: #333333;
+                color: #FFFFFF;
+                border: 1px solid #666666;
+            }
+        """)
         kill_btn.clicked.connect(self.force_kill_script)
         header_layout.addWidget(kill_btn)
         
@@ -155,23 +256,39 @@ class SettingsWindow(QWidget):
 
         # --- QTabWidget Main Structure ---
         from PyQt6.QtWidgets import QTabWidget
-        self.tab_widget = QTabWidget()
+        from PyQt6.QtGui import QIcon
+        from PyQt6.QtCore import QSize
+        import os
         
-        def create_scrollable_tab(title):
+        self.tab_widget = QTabWidget()
+        self.tab_widget.setIconSize(QSize(20, 20))
+        
+        # Fixed Path: Get icons relative to this script's location
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        icons_dir = os.path.join(script_dir, "..", "assets", "icons")
+
+        def create_scrollable_tab(title, icon_name=None):
             scroll = QScrollArea()
             scroll.setWidgetResizable(True)
             content = QWidget()
             layout = QVBoxLayout(content)
             layout.setAlignment(Qt.AlignmentFlag.AlignTop)
             scroll.setWidget(content)
-            self.tab_widget.addTab(scroll, title)
+            
+            icon = QIcon()
+            if icon_name:
+                icon_path = os.path.join(icons_dir, f"{icon_name}.png")
+                if os.path.exists(icon_path):
+                    icon = QIcon(icon_path)
+            
+            self.tab_widget.addTab(scroll, icon, title)
             return layout
         
-        self.layout_combat = create_scrollable_tab("COMBAT")
-        self.layout_setup = create_scrollable_tab("SETUP")
-        self.layout_system = create_scrollable_tab("SYSTEM")
-        self.layout_info = create_scrollable_tab("INFO")
-        self.layout_tools = create_scrollable_tab("TOOLS")
+        self.layout_combat = create_scrollable_tab("COMBAT", "combat")
+        self.layout_setup = create_scrollable_tab("SETUP", "setup")
+        self.layout_system = create_scrollable_tab("SYSTEM", "system")
+        self.layout_info = create_scrollable_tab("INFO", "info")
+        self.layout_tools = create_scrollable_tab("TOOLS", "tools")
         
         self.layout.addWidget(self.tab_widget)
 
@@ -279,7 +396,7 @@ class SettingsWindow(QWidget):
         self.model_input = QLineEdit()
         self.model_input.setPlaceholderText("Auto (Latest Training Folder) or select .pt/.onnx/.engine")
         self.model_input.setText(saved_model)
-        self.model_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 5px; border-radius: 3px;")
+        self.model_input
         
         browse_btn = QPushButton("Browse")
         browse_btn.setStyleSheet("background-color: #03DAC6; color: #000; padding: 5px; font-weight: bold; border-radius: 3px;")
@@ -301,124 +418,94 @@ class SettingsWindow(QWidget):
         aim_layout = QVBoxLayout(aim_frame)
         aim_layout.addWidget(QLabel("AIM ASSIST (FOV)", objectName="SubTitle"))
         
+        # --- Visual Overlays ---
+        aim_vis_group = QFrame(objectName="SubSection")
+        aim_vis_layout = QVBoxLayout(aim_vis_group)
+        aim_vis_layout.addWidget(QLabel("VISUAL OVERLAYS", objectName="SubTitle"))
+
         # FOV Circle Toggle
         self.show_fov_cb = QCheckBox("Show FOV Circle (Preview)")
         self.show_fov_cb.setChecked(config.get("aim_assist", "show_fov_circle", True))
-        aim_layout.addWidget(self.show_fov_cb)
+        aim_vis_layout.addWidget(self.show_fov_cb)
 
         # IPM Trajectory Line Toggle
         self.show_ipm_line_cb = QCheckBox("Show IPM Trajectory Line (Center → Target)")
         self.show_ipm_line_cb.setChecked(config.get("aim_assist", "show_ipm_line", True))
-        aim_layout.addWidget(self.show_ipm_line_cb)
+        aim_vis_layout.addWidget(self.show_ipm_line_cb)
+        
+        aim_layout.addWidget(aim_vis_group)
         
         from PyQt6.QtWidgets import QSpinBox, QDoubleSpinBox
         
-        # Confidence Threshold (Detection)
-        conf_layout = QHBoxLayout()
-        conf_label = QLabel("AI Confidence Score:")
-        conf_label.setToolTip("Minimum probability for the bot to recognize an object (e.g., 0.45 = 45%). Decrease if the bot is blind, increase if it mis-targets.")
-        conf_layout.addWidget(conf_label)
+        # --- Core Aim Settings ---
+        from PyQt6.QtWidgets import QFormLayout
+        aim_core_group = QFrame(objectName="SubSection")
+        aim_core_layout = QFormLayout(aim_core_group)
+        aim_core_layout.addWidget(QLabel("CORE AIM SETTINGS", objectName="SubTitle"))
+
+        # AI Confidence Score
         self.conf_spin = QDoubleSpinBox()
         self.conf_spin.setRange(0.05, 0.95)
         self.conf_spin.setSingleStep(0.05)
         self.conf_spin.setValue(config.get("detection", "confidence_threshold", 0.45))
-        self.conf_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        conf_layout.addWidget(self.conf_spin)
-        conf_layout.addStretch()
-        aim_layout.addLayout(conf_layout)
+        aim_core_layout.addRow("AI Confidence Score:", self.conf_spin)
         
         # FOV Radius
-        fov_layout = QHBoxLayout()
-        fov_layout.addWidget(QLabel("FOV Radius (px):"))
         self.fov_spin = QSpinBox()
         self.fov_spin.setRange(50, 800)
         self.fov_spin.setSingleStep(10)
         self.fov_spin.setValue(config.get("aim_assist", "fov_radius", 150))
-        self.fov_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        fov_layout.addWidget(self.fov_spin)
-        fov_layout.addStretch()
-        aim_layout.addLayout(fov_layout)
+        aim_core_layout.addRow("FOV Radius (px):", self.fov_spin)
         
-        # P-Gain (Sensitivity)
-        pgain_layout = QHBoxLayout()
-        pgain_layout.addWidget(QLabel("P-Gain (Sensitivity):"))
+        # P-Gain
         self.pgain_spin = QDoubleSpinBox()
         self.pgain_spin.setRange(0.01, 2.0)
         self.pgain_spin.setSingleStep(0.05)
         self.pgain_spin.setValue(config.get("aim_assist", "p_gain", 0.4))
-        self.pgain_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        pgain_layout.addWidget(self.pgain_spin)
-        pgain_layout.addStretch()
-        aim_layout.addLayout(pgain_layout)
+        aim_core_layout.addRow("P-Gain (Sensitivity):", self.pgain_spin)
         
-        # Max Delta (Speed Cap)
-        maxd_layout = QHBoxLayout()
-        maxd_layout.addWidget(QLabel("Max Delta (Speed Cap):"))
+        # Max Delta
         self.maxd_spin = QSpinBox()
         self.maxd_spin.setRange(1, 100)
         self.maxd_spin.setValue(config.get("aim_assist", "max_delta", 15))
-        self.maxd_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        maxd_layout.addWidget(self.maxd_spin)
-        maxd_layout.addStretch()
-        aim_layout.addLayout(maxd_layout)
+        aim_core_layout.addRow("Max Delta (Speed Cap):", self.maxd_spin)
         
-        # Kalman Measurement Variance
-        kalman_layout = QHBoxLayout()
-        kalman_label = QLabel("Kalman Measurement Var:")
-        kalman_label.setToolTip("Lower = Snappy (Trusts AI more). Higher = Smooth (Trusts history more). Default: 20")
-        kalman_layout.addWidget(kalman_label)
+        # Kalman Variance
         self.kalman_spin = QDoubleSpinBox()
         self.kalman_spin.setRange(1.0, 100.0)
         self.kalman_spin.setSingleStep(5.0)
         self.kalman_spin.setValue(config.get("aim_assist", "measurement_var", 20.0))
-        self.kalman_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        kalman_layout.addWidget(self.kalman_spin)
-        kalman_layout.addStretch()
-        aim_layout.addLayout(kalman_layout)
+        aim_core_layout.addRow("Kalman Measurement Var:", self.kalman_spin)
         
-        # Anti-Hallucination Speed Limit
-        halluc_layout = QHBoxLayout()
-        halluc_label = QLabel("Anti-Hallucination Speed (px/s):")
-        halluc_label.setToolTip("Annie detections moving faster than this value are considered hallucinations and discarded")
-        halluc_layout.addWidget(halluc_label)
+        # Anti-Hallucination
         self.halluc_spin = QSpinBox()
         self.halluc_spin.setRange(500, 10000)
         self.halluc_spin.setSingleStep(100)
         self.halluc_spin.setValue(config.get("aim_assist", "max_detection_speed_px_s", 2500))
-        self.halluc_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        halluc_layout.addWidget(self.halluc_spin)
-        halluc_layout.addStretch()
-        aim_layout.addLayout(halluc_layout)
+        aim_core_layout.addRow("Anti-Hallucination Speed (px/s):", self.halluc_spin)
         
         # Global Aim Offsets
-        offset_layout = QHBoxLayout()
-        offset_label = QLabel("Global Aim Offset X/Y (px):")
-        offset_label.setToolTip("Shift target cursor to specific X,Y (e.g., offset X=5 = shift 5 px to the right)")
-        offset_layout.addWidget(offset_label)
-        
+        offsets_hlayout = QHBoxLayout()
         self.offset_x_spin = QSpinBox()
         self.offset_x_spin.setRange(-1000, 1000)
-        self.offset_x_spin.setSingleStep(1)
         self.offset_x_spin.setValue(config.get("aim_assist", "global_offset_x", 0))
-        self.offset_x_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        
         self.offset_y_spin = QSpinBox()
         self.offset_y_spin.setRange(-1000, 1000)
-        self.offset_y_spin.setSingleStep(1)
         self.offset_y_spin.setValue(config.get("aim_assist", "global_offset_y", 0))
-        self.offset_y_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         
-        offset_layout.addWidget(QLabel("X:"))
-        offset_layout.addWidget(self.offset_x_spin)
-        offset_layout.addWidget(QLabel(" Y:"))
-        offset_layout.addWidget(self.offset_y_spin)
-        offset_layout.addStretch()
-        aim_layout.addLayout(offset_layout)
+        offsets_hlayout.addWidget(QLabel("X:"))
+        offsets_hlayout.addWidget(self.offset_x_spin)
+        offsets_hlayout.addWidget(QLabel(" Y:"))
+        offsets_hlayout.addWidget(self.offset_y_spin)
+        offsets_hlayout.addStretch()
+        
+        aim_core_layout.addRow("Global Aim Offset (px):", offsets_hlayout)
+        aim_layout.addWidget(aim_core_group)
 
         # ── Prediction Feature Toggles ──────────────────────────────────────
-        pred_label = QLabel("PREDICTION FEATURES", objectName="SubTitle")
-        pred_label.setStyleSheet("color: #FF9800; font-size: 13px; font-weight: bold; margin-top: 8px;")
-        aim_layout.addWidget(pred_label)
+        aim_pred_group = QFrame(objectName="SubSection")
+        aim_pred_layout = QVBoxLayout(aim_pred_group)
+        aim_pred_layout.addWidget(QLabel("PREDICTION FEATURES", objectName="SubTitle"))
 
         self.kalman_enabled_cb = QCheckBox("Enable Kalman Filter (Smooth tracking)")
         self.kalman_enabled_cb.setToolTip(
@@ -426,7 +513,7 @@ class SettingsWindow(QWidget):
             "If disabled, the bot directly uses raw YOLO coordinates without smoothing."
         )
         self.kalman_enabled_cb.setChecked(config.get("aim_assist", "kalman_enabled", True))
-        aim_layout.addWidget(self.kalman_enabled_cb)
+        aim_pred_layout.addWidget(self.kalman_enabled_cb)
 
         self.dampening_enabled_cb = QCheckBox("Enable Velocity Dampening (Anti-overshoot)")
         self.dampening_enabled_cb.setToolTip(
@@ -434,7 +521,7 @@ class SettingsWindow(QWidget):
             "If disabled, pendulum prediction might overshoot when the target stops suddenly."
         )
         self.dampening_enabled_cb.setChecked(config.get("aim_assist", "dampening_enabled", True))
-        aim_layout.addWidget(self.dampening_enabled_cb)
+        aim_pred_layout.addWidget(self.dampening_enabled_cb)
 
         self.dead_reckoning_enabled_cb = QCheckBox("Enable Dead Reckoning (Extrapolate when invisible)")
         self.dead_reckoning_enabled_cb.setToolTip(
@@ -442,7 +529,7 @@ class SettingsWindow(QWidget):
             "If disabled, the bot stops moving the cursor instantly when Annie leaves the frame."
         )
         self.dead_reckoning_enabled_cb.setChecked(config.get("aim_assist", "dead_reckoning_enabled", True))
-        aim_layout.addWidget(self.dead_reckoning_enabled_cb)
+        aim_pred_layout.addWidget(self.dead_reckoning_enabled_cb)
 
         self.lead_prediction_enabled_cb = QCheckBox("Enable Lead Prediction (Dynamic lead-time)")
         self.lead_prediction_enabled_cb.setToolTip(
@@ -450,7 +537,9 @@ class SettingsWindow(QWidget):
             "If disabled, the bot aims directly at Annie's centroid without leading."
         )
         self.lead_prediction_enabled_cb.setChecked(config.get("aim_assist", "lead_prediction_enabled", True))
-        aim_layout.addWidget(self.lead_prediction_enabled_cb)
+        aim_pred_layout.addWidget(self.lead_prediction_enabled_cb)
+        
+        aim_layout.addWidget(aim_pred_group)
         # ────────────────────────────────────────────────────────────────────
 
         self.layout_combat.addWidget(aim_frame)
@@ -458,187 +547,135 @@ class SettingsWindow(QWidget):
         # --- Combat Engine Timing Section ---
         combat_frame = QFrame(objectName="Section")
         combat_layout = QVBoxLayout(combat_frame)
-        combat_layout.addWidget(QLabel("⚔ COMBAT ENGINE TIMING", objectName="SubTitle"))
+        combat_layout.addWidget(QLabel("COMBAT ENGINE TIMING", objectName="SubTitle"))
         
         from PyQt6.QtWidgets import QSpinBox, QDoubleSpinBox
         
-        # Use Hybrid IPM Toggle
+        # -- Hybrid IPM --
+        ipm_group = QFrame(objectName="SubSection")
+        ipm_layout = QVBoxLayout(ipm_group)
         self.use_ipm_cb = QCheckBox("Use Hybrid IPM (Dynamic Duration)")
         self.use_ipm_cb.setChecked(config.get("combat_engine", "use_hybrid_ipm", False))
-        combat_layout.addWidget(self.use_ipm_cb)
+        ipm_layout.addWidget(self.use_ipm_cb)
+        combat_layout.addWidget(ipm_group)
 
-        # -- NEW: FPS Lag Compensation --
+        # -- FPS Lag Compensation --
         lag_group = QFrame(objectName="SubSection")
-        lag_layout = QVBoxLayout(lag_group)
+        lag_layout = QFormLayout(lag_group)
+        lag_layout.addWidget(QLabel("FPS LAG COMPENSATION", objectName="SubTitle"))
         
-        self.lag_comp_cb = QCheckBox("Enable FPS Lag Compensation (Auto-extend inputs)")
-        self.lag_comp_cb.setToolTip("Extend key press duration during FPS drops to prevent combo failures")
+        self.lag_comp_cb = QCheckBox("Enable Lag Compensation")
         self.lag_comp_cb.setChecked(config.get("combat_engine", "enable_lag_compensation", True))
-        lag_layout.addWidget(self.lag_comp_cb)
+        lag_layout.addRow(self.lag_comp_cb)
 
-        lag_mult_layout = QHBoxLayout()
-        lag_mult_layout.addWidget(QLabel("Max Lag Multiplier for Flight:"))
         self.lag_mult_spin = QDoubleSpinBox()
         self.lag_mult_spin.setRange(1.0, 5.0)
         self.lag_mult_spin.setSingleStep(0.1)
         self.lag_mult_spin.setValue(config.get("combat_engine", "lag_comp_max_mult", 1.3))
-        self.lag_mult_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        lag_mult_layout.addWidget(self.lag_mult_spin)
-        lag_mult_layout.addStretch()
-        lag_layout.addLayout(lag_mult_layout)
+        lag_layout.addRow("Max Lag Multiplier for Flight:", self.lag_mult_spin)
 
-        base_click_layout = QHBoxLayout()
-        base_click_layout.addWidget(QLabel("Base Click Duration (ms):"))
         self.base_click_ms_spin = QSpinBox()
         self.base_click_ms_spin.setRange(10, 500)
         self.base_click_ms_spin.setSingleStep(10)
         self.base_click_ms_spin.setValue(config.get("combat_engine", "base_click_duration_ms", 70))
-        self.base_click_ms_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        base_click_layout.addWidget(self.base_click_ms_spin)
-        base_click_layout.addStretch()
-        lag_layout.addLayout(base_click_layout)
+        lag_layout.addRow("Base Click Duration (ms):", self.base_click_ms_spin)
         
         combat_layout.addWidget(lag_group)
 
-        # -- NEW: Mid-Assault Click Sequence --
+        # -- Mid-Assault Click Sequence --
         seq_group = QFrame(objectName="SubSection")
-        seq_layout = QVBoxLayout(seq_group)
+        seq_layout = QFormLayout(seq_group)
+        seq_layout.addWidget(QLabel("ASSAULT SEQUENCE", objectName="SubTitle"))
         
         self.use_assault_click_cb = QCheckBox("Enable Initial Click (Q+E+Space → Click)")
         self.use_assault_click_cb.setChecked(config.get("combat_engine", "use_assault_click", False))
-        seq_layout.addWidget(self.use_assault_click_cb)
+        seq_layout.addRow(self.use_assault_click_cb)
         
-        click_delay_layout = QHBoxLayout()
-        click_delay_layout.addWidget(QLabel("Key-to-Click Delay (ms):"))
         self.click_delay_spin = QSpinBox()
         self.click_delay_spin.setRange(0, 1000)
         self.click_delay_spin.setSingleStep(10)
         self.click_delay_spin.setValue(int(config.get("combat_engine", "assault_key_click_delay", 0.1) * 1000))
-        self.click_delay_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        click_delay_layout.addWidget(self.click_delay_spin)
-        click_delay_layout.addStretch()
-        seq_layout.addLayout(click_delay_layout)
+        seq_layout.addRow("Key-to-Click Delay (ms):", self.click_delay_spin)
+        
         combat_layout.addWidget(seq_group)
         
+        # --- NEW: Timing & Delays ---
+        timing_group = QFrame(objectName="SubSection")
+        timing_layout = QFormLayout(timing_group)
+        timing_layout.addWidget(QLabel("TIMING & DELAYS", objectName="SubTitle"))
+
         # First Assault Duration (Static)
-        assault_first_layout = QHBoxLayout()
-        assault_first_layout.addWidget(QLabel("[FIRST HIT] Static Assault Duration (s):"))
         self.assault_first_spin = QDoubleSpinBox()
         self.assault_first_spin.setRange(0.1, 8.0)
         self.assault_first_spin.setSingleStep(0.1)
         self.assault_first_spin.setValue(config.get("combat_engine", "assault_duration_first", 1.0))
-        self.assault_first_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        assault_first_layout.addWidget(self.assault_first_spin)
-        assault_first_layout.addStretch()
-        combat_layout.addLayout(assault_first_layout)
+        timing_layout.addRow("[FIRST HIT] Static Assault Duration (s):", self.assault_first_spin)
 
         # Assault Duration (Static)
-        assault_layout = QHBoxLayout()
-        assault_layout.addWidget(QLabel("[NEXT HITS] Static Assault Duration (s):"))
         self.assault_spin = QDoubleSpinBox()
         self.assault_spin.setRange(0.1, 8.0)
         self.assault_spin.setSingleStep(0.1)
         self.assault_spin.setValue(config.get("combat_engine", "assault_duration", 1.5))
-        self.assault_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        assault_layout.addWidget(self.assault_spin)
-        assault_layout.addStretch()
-        combat_layout.addLayout(assault_layout)
+        timing_layout.addRow("[NEXT HITS] Static Assault Duration (s):", self.assault_spin)
         
         # Startup Delay
-        startup_layout = QHBoxLayout()
-        startup_label = QLabel("Startup Delay (seconds):")
-        startup_label.setToolTip("Delay before macro starts after cutscene skip, allowing game to fade in")
-        startup_layout.addWidget(startup_label)
         self.startup_spin = QDoubleSpinBox()
         self.startup_spin.setRange(0.0, 10.0)
         self.startup_spin.setSingleStep(0.5)
         self.startup_spin.setDecimals(1)
         self.startup_spin.setValue(config.get("combat_engine", "startup_delay", 2.0))
-        self.startup_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        startup_layout.addWidget(self.startup_spin)
-        startup_layout.addStretch()
-        combat_layout.addLayout(startup_layout)
+        timing_layout.addRow("Startup Delay (seconds):", self.startup_spin)
         
         # Aim Memory Duration
-        memory_layout = QHBoxLayout()
-        memory_label = QLabel("Aim Memory Duration (seconds):")
-        memory_label.setToolTip("How long the bot remembers Annie's last position when undetected")
-        memory_layout.addWidget(memory_label)
         self.memory_spin = QDoubleSpinBox()
         self.memory_spin.setRange(0.5, 10.0)
         self.memory_spin.setSingleStep(0.5)
         self.memory_spin.setDecimals(1)
         self.memory_spin.setValue(config.get("combat_engine", "aim_memory_duration", 4.0))
-        self.memory_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        memory_layout.addWidget(self.memory_spin)
-        memory_layout.addStretch()
-        combat_layout.addLayout(memory_layout)
+        timing_layout.addRow("Aim Memory Duration (seconds):", self.memory_spin)
         
-        # --- NEW: Approach Phase Settings ---
+        combat_layout.addWidget(timing_group)
+        
+        # -- Approach Phase Settings --
         approach_group = QFrame(objectName="SubSection")
-        approach_layout = QVBoxLayout(approach_group)
+        approach_layout = QFormLayout(approach_group)
         approach_layout.addWidget(QLabel("APPROACH PHASE (STATIC MACRO)", objectName="SubTitle"))
 
-        # Q+E Hold Bonus (Approach Macro)
-        qe_layout = QHBoxLayout()
-        qe_label = QLabel("Q+E Hold Bonus (seconds):")
-        qe_label.setToolTip("Extend Q+E hold duration in the initial approach macro")
-        qe_layout.addWidget(qe_label)
         self.qe_hold_spin = QDoubleSpinBox()
         self.qe_hold_spin.setRange(0.0, 10.0)
         self.qe_hold_spin.setSingleStep(0.5)
         self.qe_hold_spin.setDecimals(1)
         self.qe_hold_spin.setValue(config.get("combat_engine", "approach_qe_hold_bonus", 1.0))
-        self.qe_hold_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        qe_layout.addWidget(self.qe_hold_spin)
-        qe_layout.addStretch()
-        approach_layout.addLayout(qe_layout)
+        approach_layout.addRow("Q+E Hold Bonus (seconds):", self.qe_hold_spin)
 
-        # Static Macro Phase Duration
-        static_dur_layout = QHBoxLayout()
-        static_dur_label = QLabel("Total Approach Duration (seconds):")
-        static_dur_label.setToolTip("How long the bot plays the macro recording before switching to AI Combat (0 = Infinite/Full Macro)")
-        static_dur_layout.addWidget(static_dur_label)
         self.static_dur_spin = QDoubleSpinBox()
         self.static_dur_spin.setRange(0.0, 999.0)
         self.static_dur_spin.setSingleStep(1.0)
         self.static_dur_spin.setDecimals(1)
         self.static_dur_spin.setValue(config.get("combat_engine", "static_macro_max_duration", 7.0))
-        self.static_dur_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        static_dur_layout.addWidget(self.static_dur_spin)
-        static_dur_layout.addStretch()
-        approach_layout.addLayout(static_dur_layout)
+        approach_layout.addRow("Total Approach Duration (s):", self.static_dur_spin)
         
         combat_layout.addWidget(approach_group)
         
-        # Cooldown Duration
-        cooldown_layout = QHBoxLayout()
-        cooldown_label = QLabel("Cooldown After Dash (seconds):")
-        cooldown_label.setToolTip("Delay after Double S before dashing again")
-        cooldown_layout.addWidget(cooldown_label)
+        # -- Cooldowns & Offsets --
+        off_group = QFrame(objectName="SubSection")
+        off_layout = QFormLayout(off_group)
+        off_layout.addWidget(QLabel("COOLDOWNS & OFFSETS", objectName="SubTitle"))
+
         self.cooldown_spin = QDoubleSpinBox()
-        self.cooldown_spin.setRange(0.2, 5.0)
+        self.cooldown_spin.setRange(0.0, 5.0)
         self.cooldown_spin.setSingleStep(0.1)
         self.cooldown_spin.setDecimals(1)
-        self.cooldown_spin.setValue(config.get("combat_engine", "cooldown_duration", 1.2))
-        self.cooldown_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        cooldown_layout.addWidget(self.cooldown_spin)
-        cooldown_layout.addStretch()
-        combat_layout.addLayout(cooldown_layout)
+        self.cooldown_spin.setValue(config.get("combat_engine", "cooldown_after_dash", 1.0))
+        off_layout.addRow("Cooldown After Dash (s):", self.cooldown_spin)
         
-        # Annie Mark Y Offset
-        yoffset_layout = QHBoxLayout()
-        yoffset_label = QLabel("Annie Mark Y-Offset (px):")
-        yoffset_label.setToolTip("Downward offset when aiming at annie_mark to hit Annie's body")
-        yoffset_layout.addWidget(yoffset_label)
         self.yoffset_spin = QSpinBox()
         self.yoffset_spin.setRange(0, 500)
         self.yoffset_spin.setSingleStep(10)
         self.yoffset_spin.setValue(config.get("combat_engine", "annie_mark_y_offset", 150))
-        self.yoffset_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        yoffset_layout.addWidget(self.yoffset_spin)
-        yoffset_layout.addStretch()
-        combat_layout.addLayout(yoffset_layout)
+        off_layout.addRow("Annie Mark Y Offset (px):", self.yoffset_spin)
+        
+        combat_layout.addWidget(off_group)
         
         self.layout_combat.addWidget(combat_frame)
         
@@ -647,16 +684,21 @@ class SettingsWindow(QWidget):
         debug_layout = QVBoxLayout(debug_frame)
         debug_layout.addWidget(QLabel("DIAGNOSTICS", objectName="SubTitle"))
         
+        # --- Toggles ---
+        diag_tog_group = QFrame(objectName="SubSection")
+        diag_tog_layout = QVBoxLayout(diag_tog_group)
+        diag_tog_layout.addWidget(QLabel("TOGGLES", objectName="SubTitle"))
+
         self.eyes_only_cb = QCheckBox("Eyes Only Mode (No Actions)")
         self.eyes_only_cb.setChecked(config.get("bot", "eyes_only", False))
-        debug_layout.addWidget(self.eyes_only_cb)
+        diag_tog_layout.addWidget(self.eyes_only_cb)
         
         # Phase 125: Visual Overlay Toggle
         self.show_overlay_cb = QCheckBox("Show Visual Overlay (Boxes/Crosshair)")
         self.show_overlay_cb.setChecked(config.get("bot", "show_overlay", True))
-        debug_layout.addWidget(self.show_overlay_cb)
+        diag_tog_layout.addWidget(self.show_overlay_cb)
 
-        # OCR Debug Mode — saves cropped reward images to debug_ocr/ folder
+        # OCR Debug Mode
         self.ocr_debug_cb = QCheckBox("OCR Debug Mode (Save reward crop images)")
         self.ocr_debug_cb.setToolTip(
             "When active, upon mission completion the bot will save reward ROI crops\n"
@@ -664,76 +706,49 @@ class SettingsWindow(QWidget):
             "Use this to verify Gold/Exp/Gems OCR accuracy."
         )
         self.ocr_debug_cb.setChecked(config.get("reward_regions", "debug_mode", False))
-        debug_layout.addWidget(self.ocr_debug_cb)
+        diag_tog_layout.addWidget(self.ocr_debug_cb)
         
-        # Phase 98: Dedicated UI field for Modifier Scroll Amount
-        scroll_layout = QHBoxLayout()
-        scroll_layout.addWidget(QLabel("Modifier Scroll Amount (Ticks):"))
+        debug_layout.addWidget(diag_tog_group)
+
+        # --- Global Settings ---
+        diag_glob_group = QFrame(objectName="SubSection")
+        diag_glob_layout = QFormLayout(diag_glob_group)
+        diag_glob_layout.addWidget(QLabel("GLOBAL SETTINGS", objectName="SubTitle"))
+
+        # Modifier Scroll Amount
         self.scroll_input = QLineEdit()
         self.scroll_input.setText(str(config.get("bot", "modifier_scroll_amount", -5500)))
-        self.scroll_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         self.scroll_input.setFixedWidth(80)
-        scroll_layout.addWidget(self.scroll_input)
-        scroll_layout.addStretch()
+        diag_glob_layout.addRow("Modifier Scroll Amount (Ticks):", self.scroll_input)
 
-        # Phase 111: Brightness Booster UI
-        bright_layout = QHBoxLayout()
-        bright_layout.addWidget(QLabel("Brightness Booster (1.0 = Normal):"))
+        # Brightness Booster
         self.bright_input = QLineEdit()
         self.bright_input.setText(str(config.get("screen", "brightness_multiplier", 1.0)))
-        self.bright_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         self.bright_input.setFixedWidth(80)
-        bright_layout.addWidget(self.bright_input)
-        bright_layout.addStretch()
+        diag_glob_layout.addRow("Brightness Booster (1.0 = Normal):", self.bright_input)
         
-        debug_layout.addLayout(bright_layout)
-        
-        # Phase 118: Bot Speed Input
-        speed_layout = QHBoxLayout()
-        speed_label = QLabel("Bot Global Speed (Multiplier):")
-        speed_label.setStyleSheet("color: #BB86FC; font-weight: bold;")
-        speed_layout.addWidget(speed_label)
-        
+        # Bot Speed
         self.speed_spin = QDoubleSpinBox()
         self.speed_spin.setRange(0.1, 20.0)
         self.speed_spin.setSingleStep(0.1)
         self.speed_spin.setValue(config.get("bot", "bot_speed", 1.0))
-        self.speed_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        speed_layout.addWidget(self.speed_spin)
-        speed_layout.addStretch()
-        
-        debug_layout.addLayout(speed_layout)
+        diag_glob_layout.addRow("Bot Global Speed (Multiplier):", self.speed_spin)
         
         # Target FPS
-        fps_layout = QHBoxLayout()
-        fps_label = QLabel("Target FPS (Global Capture):")
-        fps_label.setStyleSheet("color: #03DAC6; font-weight: bold;")
-        fps_layout.addWidget(fps_label)
         self.fps_spin = QSpinBox()
         self.fps_spin.setRange(10, 120)
         self.fps_spin.setSingleStep(5)
         self.fps_spin.setValue(config.get("bot", "target_fps", 45))
-        self.fps_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        fps_layout.addWidget(self.fps_spin)
-        fps_layout.addStretch()
-        debug_layout.addLayout(fps_layout)
+        diag_glob_layout.addRow("Target FPS (Global Capture):", self.fps_spin)
 
         # Annie Mark Target FPS
-        fps_annie_layout = QHBoxLayout()
-        fps_annie_label = QLabel("Target FPS (Annie Mark):")
-        fps_annie_label.setStyleSheet("color: #FF9800; font-weight: bold;")
-        fps_annie_label.setToolTip("Specific FPS when detecting/scanning 'annie_mark'. 0 = Follow Global FPS")
-        fps_annie_layout.addWidget(fps_annie_label)
         self.fps_annie_spin = QSpinBox()
         self.fps_annie_spin.setRange(0, 120)
         self.fps_annie_spin.setSingleStep(5)
         self.fps_annie_spin.setValue(config.get("bot", "target_fps_annie_mark", 0))
-        self.fps_annie_spin.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
-        fps_annie_layout.addWidget(self.fps_annie_spin)
-        fps_annie_layout.addStretch()
-        debug_layout.addLayout(fps_annie_layout)
+        diag_glob_layout.addRow("Target FPS (Annie Mark):", self.fps_annie_spin)
         
-        debug_layout.addLayout(scroll_layout)
+        debug_layout.addWidget(diag_glob_group)
         debug_layout.addSpacing(10)
         
         self.layout_info.addWidget(debug_frame)
@@ -743,26 +758,29 @@ class SettingsWindow(QWidget):
         discord_layout = QVBoxLayout(discord_frame)
         discord_layout.addWidget(QLabel("DISCORD BOT", objectName="SubTitle"))
         
+        # --- Discord Credentials ---
+        discord_cred_group = QFrame(objectName="SubSection")
+        discord_cred_layout = QVBoxLayout(discord_cred_group)
+        discord_cred_layout.addWidget(QLabel("CREDENTIALS & WEBHOOKS", objectName="SubTitle"))
+
         self.discord_enabled_cb = QCheckBox("Enable Discord Bot")
         self.discord_enabled_cb.setChecked(config.get("discord_bot", "enabled", False))
-        discord_layout.addWidget(self.discord_enabled_cb)
+        discord_cred_layout.addWidget(self.discord_enabled_cb)
         
         token_layout = QHBoxLayout()
         token_layout.addWidget(QLabel("Bot Token:"))
         self.discord_token_input = QLineEdit()
         self.discord_token_input.setEchoMode(QLineEdit.EchoMode.Password) # Privacy
         self.discord_token_input.setText(config.get("discord_bot", "token", ""))
-        self.discord_token_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         token_layout.addWidget(self.discord_token_input)
-        discord_layout.addLayout(token_layout)
+        discord_cred_layout.addLayout(token_layout)
         
         admin_layout = QHBoxLayout()
         admin_layout.addWidget(QLabel("Admin User ID:"))
         self.discord_admin_input = QLineEdit()
         self.discord_admin_input.setText(str(config.get("discord_bot", "admin_user_id", "")))
-        self.discord_admin_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         admin_layout.addWidget(self.discord_admin_input)
-        discord_layout.addLayout(admin_layout)
+        discord_cred_layout.addLayout(admin_layout)
         
         # Webhook URL field
         webhook_layout = QHBoxLayout()
@@ -776,24 +794,20 @@ class SettingsWindow(QWidget):
         self.discord_webhook_input.setEchoMode(QLineEdit.EchoMode.Password)  # Privacy
         self.discord_webhook_input.setPlaceholderText("https://discord.com/api/webhooks/...")
         self.discord_webhook_input.setText(config.get("discord_bot", "webhook_url", ""))
-        self.discord_webhook_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         webhook_layout.addWidget(self.discord_webhook_input)
-        discord_layout.addLayout(webhook_layout)
+        discord_cred_layout.addLayout(webhook_layout)
         
         # Reward Webhook URL field
         reward_webhook_layout = QHBoxLayout()
         reward_webhook_label = QLabel("Reward Webhook:")
-        reward_webhook_label.setToolTip("Optional SEPARATE Webhook URL specifically for receiving Reward Photos per match.")
+        reward_webhook_label.setToolTip("Optional: Separate webhook exclusively for Boss Rewards")
         reward_webhook_layout.addWidget(reward_webhook_label)
+        
         self.discord_reward_webhook_input = QLineEdit()
         self.discord_reward_webhook_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.discord_reward_webhook_input.setPlaceholderText("https://discord.com/api/webhooks/... (Optional)")
         self.discord_reward_webhook_input.setText(config.get("discord_bot", "reward_webhook_url", ""))
-        self.discord_reward_webhook_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
         reward_webhook_layout.addWidget(self.discord_reward_webhook_input)
-        discord_layout.addLayout(reward_webhook_layout)
-        
-        self.layout_system.addWidget(discord_frame)
         
         # --- Window Management Section ---
         win_frame = QFrame(objectName="Section")
@@ -812,7 +826,7 @@ class SettingsWindow(QWidget):
         reconnect_layout.addWidget(QLabel("Relog after (min):"))
         self.reconnect_delay_input = QLineEdit()
         self.reconnect_delay_input.setText(str(config.get("window_management", "reconnect_delay_minutes", 2)))
-        self.reconnect_delay_input.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
+        self.reconnect_delay_input
         self.reconnect_delay_input.setFixedWidth(50)
         reconnect_layout.addWidget(self.reconnect_delay_input)
         reconnect_layout.addStretch()
@@ -827,7 +841,7 @@ class SettingsWindow(QWidget):
         current_w = config.get("screen", "width", 1920)
         self.res_combo.setCurrentIndex(1 if current_w >= 2560 else 0)
         
-        self.res_combo.setStyleSheet("background-color: #2D2D2D; color: #FFFFFF; padding: 2px; border-radius: 3px;")
+        self.res_combo
         res_layout.addWidget(self.res_combo)
         res_layout.addStretch()
         win_layout.addLayout(res_layout)
@@ -842,7 +856,6 @@ class SettingsWindow(QWidget):
         config_header.addWidget(QLabel("LIVE CONFIG.JSON VIEWER", objectName="SubTitle"))
         
         refresh_btn = QPushButton("Refresh from Disk")
-        refresh_btn.setStyleSheet("background-color: #3700B3; color: #fff; padding: 3px; font-weight: bold; border-radius: 3px;")
         refresh_btn.clicked.connect(self.refresh_config_view)
         config_header.addWidget(refresh_btn)
         
@@ -851,10 +864,29 @@ class SettingsWindow(QWidget):
         self.config_text = QTextEdit()
         self.config_text.setReadOnly(True)
         self.config_text.setFixedHeight(120)
-        self.config_text.setStyleSheet("background-color: #000; color: #0f0; font-family: Consolas, monospace; font-size: 11px; padding: 5px; border: 1px solid #333;")
+        self.config_text.setStyleSheet("background-color: #121212; color: #B0B0B0; font-family: Consolas, monospace; font-size: 11px; padding: 5px; border: 1px solid #444444;")
         config_layout.addWidget(self.config_text)
         
         self.layout_info.addWidget(config_frame)
+
+        # --- Version Label + Update Status (INFO tab footer) ---
+        version_footer = QWidget()
+        version_footer_layout = QHBoxLayout(version_footer)
+        version_footer_layout.setContentsMargins(8, 4, 8, 4)
+        
+        from bot.updater import CURRENT_VERSION
+        self.version_label = QLabel(f"L.A.R.P v{CURRENT_VERSION}")
+        self.version_label.setStyleSheet("color: #555555; font-size: 11px;")
+        
+        self.update_status_label = QLabel("Checking for updates...")
+        self.update_status_label.setStyleSheet("color: #555555; font-size: 11px;")
+        
+        version_footer_layout.addWidget(self.version_label)
+        version_footer_layout.addStretch()
+        version_footer_layout.addWidget(self.update_status_label)
+        
+        self.layout_info.addWidget(version_footer)
+        self.layout_info.addStretch()
 
         # --- Tools Section ---
         tools_frame = QFrame(objectName="Section")
@@ -884,22 +916,25 @@ class SettingsWindow(QWidget):
         # Auto-refresh viewer when config.json changes on disk (e.g. manual edits)
         self._config_watcher = QFileSystemWatcher([config._path])
         self._config_watcher.fileChanged.connect(self._on_config_file_changed)
+        
+        # --- Kick off background update check ---
+        from bot.updater import check_for_updates_async
+        check_for_updates_async(self._on_update_check_result)
 
         # --- Actions ---
         action_layout = QHBoxLayout()
-
-        save_only_btn = QPushButton("SAVE CONFIG", objectName="SaveBtn")
-        save_only_btn.clicked.connect(self.save_settings)
-
-        reload_btn = QPushButton("HOT-RELOAD", objectName="ReloadBtn")
-        reload_btn.clicked.connect(self.on_reload_clicked)
         
-        start_btn = QPushButton("SAVE AND START", objectName="StartBtn")
+        hotkey_btn = QPushButton("HOTKEYS F1 Start    F2 Pause    F3 Stop")
+        hotkey_btn.setObjectName("HotkeyBtn")
+        hotkey_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        hotkey_btn.setToolTip("Use these keyboard keys to control the bot while running.")
+        
+        start_btn = QPushButton("SAVE AND START")
+        start_btn.setObjectName("StartBtn")
         start_btn.setToolTip("Will save config and close this menu.")
         start_btn.clicked.connect(self.save_and_start)
         
-        action_layout.addWidget(save_only_btn)
-        action_layout.addWidget(reload_btn)
+        action_layout.addWidget(hotkey_btn)
         action_layout.addWidget(start_btn)
         
         control_layout.addLayout(action_layout)
@@ -928,7 +963,41 @@ class SettingsWindow(QWidget):
             w.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
             w.installEventFilter(self._scroll_blocker)
 
+    def _on_update_check_result(self, release: dict | None):
+        """
+        Called from background thread when update check completes.
+        Uses Qt's thread-safe invokeMethod pattern via a stored lambda.
+        """
+        from PyQt6.QtCore import QMetaObject, Qt as QtCore_Qt
+        # We need to update the UI from the main thread, so we use a timer trick
+        if release:
+            self._pending_update = release
+            QMetaObject.invokeMethod(self, "_show_update_available", QtCore_Qt.ConnectionType.QueuedConnection)
+        else:
+            self._pending_update = None
+            QMetaObject.invokeMethod(self, "_show_up_to_date", QtCore_Qt.ConnectionType.QueuedConnection)
+
+    from PyQt6.QtCore import pyqtSlot
+
+    @pyqtSlot()
+    def _show_update_available(self):
+        release = getattr(self, "_pending_update", None)
+        if not release:
+            return
+        # Update the label in INFO tab footer
+        self.update_status_label.setText("🔔 Update Available!")
+        self.update_status_label.setStyleSheet("color: #FFA726; font-size: 11px; font-weight: bold;")
+        # Show the update dialog
+        dialog = UpdateDialog(release, self)
+        dialog.exec()
+
+    @pyqtSlot()
+    def _show_up_to_date(self):
+        self.update_status_label.setText("✔ Up to date")
+        self.update_status_label.setStyleSheet("color: #4CAF50; font-size: 11px;")
+
     def browse_model(self):
+
         file_path, _ = QFileDialog.getOpenFileName(
             self, "Select YOLO Model", "", "YOLO Models (*.pt *.onnx *.engine);;All Files (*)"
         )
@@ -1168,7 +1237,135 @@ class SettingsWindow(QWidget):
             pydirectinput.click(x=x_enh, y=y_enh)
             time.sleep(0.3)
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Update Dialog — Premium styled, matching the L.A.R.P. dark theme
+# ─────────────────────────────────────────────────────────────────────────────
+class UpdateDialog(QDialog):
+    """A styled update prompt that notifies the user of a new L.A.R.P. release."""
+
+    def __init__(self, release: dict, parent=None):
+        super().__init__(parent)
+        from bot.updater import CURRENT_VERSION, open_release_page
+
+        self.release_url = release.get("html_url", "")
+        self.open_release_page = open_release_page
+
+        self.setWindowTitle("L.A.R.P — Update Available")
+        self.setFixedSize(480, 320)
+        self.setModal(True)
+        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.FramelessWindowHint)
+
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #1A1A1A;
+                border: 1px solid #2196F3;
+                border-radius: 10px;
+            }
+            QLabel { color: #B0B0B0; font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif; }
+            QTextEdit {
+                background-color: #121212;
+                color: #888888;
+                border: 1px solid #333333;
+                border-radius: 4px;
+                font-size: 11px;
+                font-family: 'Consolas', monospace;
+                padding: 6px;
+            }
+            QPushButton {
+                border-radius: 5px;
+                padding: 9px 20px;
+                font-weight: bold;
+                font-size: 13px;
+            }
+            QPushButton#DownloadBtn {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2196F3, stop:1 #1565C0);
+                color: #FFFFFF;
+                border: 1px solid #0D47A1;
+            }
+            QPushButton#DownloadBtn:hover {
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #42A5F5, stop:1 #1976D2);
+            }
+            QPushButton#LaterBtn {
+                background-color: #2A2A2A;
+                color: #888888;
+                border: 1px solid #444444;
+            }
+            QPushButton#LaterBtn:hover {
+                background-color: #383838;
+                color: #AAAAAA;
+            }
+        """)
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(24, 20, 24, 20)
+        layout.setSpacing(12)
+
+        # Header
+        header_layout = QHBoxLayout()
+        badge = QLabel("NEW RELEASE")
+        badge.setStyleSheet(
+            "color: #2196F3; font-size: 10px; font-weight: bold; "
+            "background-color: #1A2D3D; border: 1px solid #2196F3; "
+            "border-radius: 3px; padding: 2px 6px;"
+        )
+        header_layout.addWidget(badge)
+        header_layout.addStretch()
+        close_x = QPushButton("✕")
+        close_x.setFixedSize(24, 24)
+        close_x.setStyleSheet(
+            "QPushButton { background: transparent; color: #555; border: none; font-size: 14px; }"
+            "QPushButton:hover { color: #FFF; }"
+        )
+        close_x.clicked.connect(self.reject)
+        header_layout.addWidget(close_x)
+        layout.addLayout(header_layout)
+
+        # Title
+        title = QLabel(f"Update Available: v{release.get('tag_name', '?')}")
+        title.setStyleSheet("color: #FFFFFF; font-size: 16px; font-weight: bold;")
+        layout.addWidget(title)
+
+        subtitle = QLabel(f"You are on <b>v{CURRENT_VERSION}</b>. The latest version is <b>v{release.get('tag_name', '?')}</b>.")
+        subtitle.setStyleSheet("color: #888888; font-size: 12px;")
+        subtitle.setWordWrap(True)
+        layout.addWidget(subtitle)
+
+        # Release Notes
+        notes_label = QLabel("Release Notes:")
+        notes_label.setStyleSheet("color: #666666; font-size: 11px;")
+        layout.addWidget(notes_label)
+
+        notes_box = QTextEdit()
+        notes_box.setReadOnly(True)
+        notes_box.setFixedHeight(80)
+        notes_box.setPlainText(release.get("body", "No release notes provided."))
+        layout.addWidget(notes_box)
+
+        layout.addStretch()
+
+        # Buttons
+        btn_layout = QHBoxLayout()
+        later_btn = QPushButton("Later")
+        later_btn.setObjectName("LaterBtn")
+        later_btn.clicked.connect(self.reject)
+
+        download_btn = QPushButton("⬇  Download Now")
+        download_btn.setObjectName("DownloadBtn")
+        download_btn.clicked.connect(self._on_download)
+
+        btn_layout.addWidget(later_btn)
+        btn_layout.addStretch()
+        btn_layout.addWidget(download_btn)
+        layout.addLayout(btn_layout)
+
+    def _on_download(self):
+        self.open_release_page(self.release_url)
+        self.accept()
+
+
 if __name__ == "__main__":
+
     from PyQt6.QtWidgets import QApplication
     app = QApplication([])
     window = SettingsWindow()

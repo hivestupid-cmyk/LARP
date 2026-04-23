@@ -53,7 +53,7 @@ DISCONNECT_KEYWORDS = list({
     "Teleport Failed": "Teleport Failed",
     "Unexpected client behavior": "Unexpected client behavior / Crash",
     "Kicked": "Kicked from server",
-    "Security Timeout": "Security Timeout",
+    "Security Timeout": "Security Timeout"
 }.keys())
 
 REASON_MAP = {
@@ -327,6 +327,18 @@ class RobloxReconnectWatchdog:
         except Exception as log_err:
              logger.error("[Watchdog] CSV log failed: %s", log_err)
 
+        # 4.5. Wait for Internet Connection (Crucial for Wi-Fi Drops)
+        logger.info("[Watchdog] Checking internet connection before relaunching...")
+        while True:
+            try:
+                import socket
+                socket.create_connection(("8.8.8.8", 53), timeout=3).close()
+                logger.info("[Watchdog] Internet connection verified.")
+                break
+            except OSError:
+                logger.warning("[Watchdog] No internet connection. Waiting 5 seconds before retrying...")
+                time.sleep(5)
+
         # 5. Relaunch (Protocol URL)
         try:
             url = f"roblox://placeId={self.current_place_id}/"
@@ -415,6 +427,9 @@ class RobloxReconnectWatchdog:
                 while self._is_running and self.latest_log_file == filepath:
                     line = f.readline()
                     if not line:
+                        # IMPORTANT: Clear Python's EOF internal buffer flag so it sees new writes
+                        f.seek(0, os.SEEK_CUR)
+                        
                         self._check_window_health()
                         time.sleep(0.25)
                         

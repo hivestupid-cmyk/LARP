@@ -106,19 +106,28 @@ if not exist "logs" mkdir "logs"
 echo  [OK] Directories ready.
 echo.
 
+:: ── Step 6: Download AI Model ─────────────────────────────────────────────────
+echo  [6/6] Downloading AI Model...
+python -m bot.download_model
+if errorlevel 1 (
+    echo.
+    echo  [WARNING] Failed to download AI model automatically.
+    echo  You may need to download it manually later.
+) else (
+    echo  [OK] AI Model downloaded successfully.
+)
+echo.
+
 :: ── Done ──────────────────────────────────────────────────────────────────────
 echo  ============================================================
 echo   Installation Complete!
 echo  ============================================================
 echo.
 echo  Next steps:
-echo   1. Place your YOLO model (best.pt) in:
-echo      assets\models\
-echo.
-echo   2. Edit config.json with your settings
+echo   1. Edit config.json with your settings
 echo      (screen resolution, Discord token, etc.)
 echo.
-echo   3. Run the bot by double-clicking run.bat
+echo   2. Run the bot by double-clicking run.bat
 echo.
 echo  ============================================================
 echo.
