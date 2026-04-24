@@ -3,7 +3,7 @@ import urllib.request
 import sys
 
 # Placeholder URL - Change this to your actual GitHub Release URL once you upload the model!
-MODEL_URL = "https://github.com/hivestupid-cmyk/LARP-Models/releases/download/v1.0/best.pt"
+MODEL_URL = "https://github.com/hivestupid-cmyk/LARP-Assets/releases/download/L.A.R.P-Assets/best.pt"
 MODEL_FILENAME = "best.pt"
 
 def _progress_hook(count, block_size, total_size):

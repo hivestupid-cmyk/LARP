@@ -158,6 +158,36 @@ If the bot crashes on startup or runs extremely slowly on an NVIDIA GPU, your Py
 
 ---
 
+### 🐍 Python & Pip Troubleshooting
+
+**Q: "python" or "pip" is not recognized in CMD/Terminal.**
+> **A:** This means Python is not in your System PATH.
+> 1. Find your Python installation folder (usually `%LocalAppData%\Programs\Python\Python31x`).
+> 2. Open **Environment Variables** > **Path** > **Edit**.
+> 3. Add the Python folder AND the `Scripts\` folder to the list.
+> 4. **IMPORTANT:** Move these two entries to the top (Move Up) to prevent Windows from using the "placeholder" Python from the Microsoft Store.
+
+**Q: Python works, but "pip" does not.**
+> **A:** Sometimes the pip launcher is missing or corrupted. Try calling it via Python:
+> ```bash
+> python -m ensurepip --upgrade
+> ```
+> If that fails, download `get-pip.py` from [bootstrap.pypa.io](https://bootstrap.pypa.io/get-pip.py) and run it: `python get-pip.py`.
+
+**Q: I get "ValueError: Unable to find resource t64.exe" during installation.**
+> **A:** This is a common bug in newer Python versions (like 3.13) when Pip breaks during an upgrade.
+> **Fix:** Reinstall Pip cleanly by running:
+> ```bash
+> curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+> python get-pip.py
+> ```
+> This forces Pip to rebuild its executable launchers from scratch.
+
+**Q: Libraries are installed but the bot says "ModuleNotFoundError".**
+> **A:** You might have multiple Python versions. Check if Pip is installing to the `Roaming` folder instead of `Local`. Ensure your IDE/Terminal is using the same Python environment where you ran `pip install`.
+
+---
+
 ## Bug Reporting & Contact
 
 If you encounter a bug that isn't covered in the Troubleshooting or FAQ sections, please report it!
