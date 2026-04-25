@@ -1,27 +1,15 @@
-# AOTR Bot — Python dependencies
-# Install: pip install -r requirements.txt
-# Note: torch + torchvision must be installed separately with the correct CUDA version.
-# See: https://pytorch.org/get-started/locally/
-
-# Core inference
-ultralytics>=8.3.0      # YOLO11n support (ultralytics 8.3+)
-torch>=2.2.0            # PyTorch — install with CUDA 12.x build from pytorch.org
-
-# Screen capture
-dxcam>=0.0.5            # DXGI zero-latency capture
-
-# GUI
-PyQt6>=6.6.0            # Transparent overlay
-
-# Input
-keyboard>=0.13.5        # Global hotkeys (F8/F9)
-
-# Computer vision
-opencv-python>=4.9.0    # cv2 for letterboxing (INTER_LINEAR resize + copyMakeBorder)
-numpy>=1.26.0
-easyocr>=1.7.1          # HUD Distance OCR
-discord.py>=2.3.2       # Discord Bot integration
-psutil>=5.9.0
-pygetwindow>=1.0.0
-pydirectinput>=1.0.4    # DirectInput keyboard/mouse (in_game_macro, controller)
-Pillow>=10.0.0          # PIL for screen capture utilities
+PyQt6==6.8.1
+opencv-python==4.11.0.86
+pydirectinput==1.0.4
+pygetwindow>=0.0.9
+keyboard==0.13.5
+packaging==24.2
+requests==2.32.3
+torch==2.6.0
+torchvision==0.21.0
+ultralytics==8.3.82
+pywin32; platform_system == "Windows"
+python-dotenv==1.0.1
+mss==9.0.1
+pillow==11.1.0
+psutil==7.0.0
